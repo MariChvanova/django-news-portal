@@ -84,7 +84,6 @@ class Post(models.Model):
         """ Вернуть url, зарегистрированный для отображения одиночного товара """
         return reverse('post_detail', args=[str(self.id)])
 
-
 class PostCategory(models.Model):
     """ Промежуточная модель для связи «многие ко многим». """
     post = models.ForeignKey(Post, on_delete=models.CASCADE)

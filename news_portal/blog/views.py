@@ -4,6 +4,8 @@ from .models import Post
 from .filters import PostFilter
 from .forms import PostForm
 
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 
 class PostsList(ListView):
     """ Представление всех постов в виде списка. """
@@ -42,8 +44,11 @@ class PostDetail(DetailView):
     context_object_name = 'post'
 
 
-class ArticleCreate(CreateView):
+class ArticleCreate(LoginRequiredMixin, CreateView):
     """ Представление для создания статьи. """
+    login_url = "/login/"
+    redirect_field_name = "news"
+    raise_exception = True
     form_class = PostForm
     model = Post
     template_name = 'post_edit.html'
@@ -79,8 +84,11 @@ class ArticleDelete(DeleteView):
         return context
 
 
-class NewsCreate(CreateView):
+class NewsCreate(LoginRequiredMixin, CreateView):
     """ Представление для создания новости. """
+    login_url = "/login/"
+    redirect_field_name = "news"
+    raise_exception = True
     form_class = PostForm
     model = Post
     template_name = 'post_edit.html'
