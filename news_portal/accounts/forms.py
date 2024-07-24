@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 
 
 
+
 class SignUpForm(UserCreationForm):
     email = forms.EmailField(label="Email")
     first_name = forms.CharField(label="Имя")
@@ -19,3 +20,4 @@ class SignUpForm(UserCreationForm):
             "password1",
             "password2",
         ]
+

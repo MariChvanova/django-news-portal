@@ -6,6 +6,14 @@ from .forms import PostForm
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
+#15.07.2024
+from django.views.decorators.cache import cache_page
+#15.07.2024
+@cache_page(60 * 15) # в аргументы к декоратору передаём количество секунд, которые хотим, чтобы страница держалась в кэше. Внимание! Пока страница находится в кэше, изменения, происходящие на ней, учитываться не будут!
+def my_view(request):
+    ...
+
+
 
 class PostsList(ListView):
     """ Представление всех постов в виде списка. """

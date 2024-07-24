@@ -4,6 +4,7 @@ from .views import PostsList, PostDetail, SearchPosts
 from .views import ArticleCreate, ArticleUpdate, ArticleDelete
 from .views import NewsCreate, NewsUpdate, NewsDelete
 
+
 urlpatterns = [
     path('', PostsList.as_view(), name='posts_list'),
     path('<int:pk>/', PostDetail.as_view(), name='post_detail'),
