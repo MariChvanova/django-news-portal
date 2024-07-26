@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -178,4 +179,131 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 
+#Добавлено 25.07.2024 Логи
 
+def debug_info_filter(message):
+    return message.levelname == 'DEBUG' or message.levelname == 'INFO'
+
+
+def warning_filter(message):
+    return message.levelname == 'WARNING'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'console_debug_info': {
+            'format': '{asctime} {levelname} {message}',
+            'style': '{',
+        },
+        'console_warning': {
+            'format': '{asctime} {levelname} {message} {pathname}',
+            'style': '{',
+        },
+        'console_error_critical': {
+            'format': '{asctime} {levelname} {message} {pathname} {exc_info}',
+            'style': '{',
+        },
+        'file_general_log': {
+            'format': '{asctime} {levelname} {module} {message}',
+            'style': '{',
+        },
+        'file_errors_log': {
+            'format': '{asctime} {levelname} {message} {pathname} {exc_info}',
+            'style': '{',
+        },
+        'file_security_log': {
+            'format': '{asctime} {levelname} {module} {message}',
+            'style': '{',
+        },
+        'mail_errors_log': {
+            'format': '{asctime} {levelname} {message} {pathname}',
+            'style': '{',
+        },
+    },
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+        'debug_info_filter': {
+            '()': 'django.utils.log.CallbackFilter',
+            'callback': debug_info_filter,
+        },
+        'warning_filter': {
+            '()': 'django.utils.log.CallbackFilter',
+            'callback': warning_filter,
+        },
+    },
+    'handlers': {
+        'console_debug_info': {
+            'level': 'DEBUG',
+            'filters': ['require_debug_true', 'debug_info_filter'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'console_debug_info'
+        },
+        'console_warning': {
+            'level': 'WARNING',
+            'filters': ['require_debug_true', 'warning_filter'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'console_warning'
+        },
+        'console_error_critical': {
+            'level': 'ERROR',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'console_error_critical'
+        },
+        'file_general_log': {
+            'level': 'INFO',
+            'filters': ['require_debug_false'],
+            'class': 'logging.FileHandler',
+            'filename': 'Logging/general.log',
+            'formatter': 'file_general_log'
+        },
+        'file_errors_log': {
+            'class': 'logging.FileHandler',
+            'filename': 'Logging/errors.log',
+            'formatter': 'file_errors_log'
+        },
+        'file_security_log': {
+            'class': 'logging.FileHandler',
+            'filename': 'Logging/security.log',
+            'formatter': 'file_security_log'
+        },
+        'mail_admins': {
+            'class': 'django.utils.log.AdminEmailHandler',
+            'filters': ['require_debug_false'],
+            'formatter': 'mail_errors_log'
+        }
+    },
+    'loggers': {
+        'django': {
+            'level': 'DEBUG',
+            'handlers': ['console_debug_info', 'console_warning', 'console_error_critical', 'file_general_log'],
+            'propagate': True
+        },
+        'django.request': {
+            'level': 'ERROR',
+            'handlers': ['file_errors_log', 'mail_admins'],
+        },
+        'django.server': {
+            'level': 'ERROR',
+            'handlers': ['file_errors_log', 'mail_admins'],
+        },
+        'django.template': {
+            'level': 'ERROR',
+            'handlers': ['file_errors_log'],
+        },
+        'django.db_backends': {
+            'level': 'ERROR',
+            'handlers': ['file_errors_log'],
+        },
+        'django.security': {
+            'level': 'DEBUG',
+            'handlers': ['file_security_log'],
+        },
+    }
+}

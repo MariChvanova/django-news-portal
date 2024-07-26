@@ -1,13 +1,21 @@
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Post
 from .filters import PostFilter
 from .forms import PostForm
-
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import render
+
+
+import logging
 
 #15.07.2024
 from django.views.decorators.cache import cache_page
+
+logger = logging.getLogger(__name__)
+
+
 #15.07.2024
 @cache_page(60 * 15) # в аргументы к декоратору передаём количество секунд, которые хотим, чтобы страница держалась в кэше. Внимание! Пока страница находится в кэше, изменения, происходящие на ней, учитываться не будут!
 def my_view(request):
@@ -130,3 +138,13 @@ class NewsDelete(DeleteView):
         context['page_title'] = "Удалить новость"
         context['previous_page_url'] = reverse_lazy('posts_list')
         return context
+
+def logging_page(request):
+    return render(request, 'logging_page.html')
+
+
+def test_error(request):
+    raise Exception
+    return HttpResponseRedirect(reverse('logging_page'))
+
+

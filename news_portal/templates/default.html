@@ -33,6 +33,8 @@
                <li class="nav-item"> <a class="nav-link" href="/accounts/signup/">Регистрация пользователя</a></li>
                <li class="nav-item"> <a class="nav-link" href="{% url 'search_posts' %}">Поиск</a></li>
                <li class="nav-item"> <a class="nav-link" href="/accounts/logout/">Выход</a></li>
+               <li class="nav-item"> <a class="nav-link" href="{% url 'logging_page' %}">Test logging</a></li>
+
                <!-- Добавить здесь новые пункты меню. -->
            </ul>
            <h1>{{ request.resolver_match.view_name }}</h1>

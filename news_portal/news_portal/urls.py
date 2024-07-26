@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from .robots import robots_txt
 
 
 urlpatterns = [
@@ -25,6 +26,6 @@ urlpatterns = [
     # path('accounts/', include('allauth.urls')),
     path('accounts/', include('accounts.urls')),
     path('', include('blog.urls')),
-
+    path('robots.txt', robots_txt),
 
 ]
